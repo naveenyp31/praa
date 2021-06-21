@@ -23,13 +23,15 @@ pipeline{
             }
         }
         stage('deploy'){
-            sshagent(['tomcat9']) {
-              sh """
-              scp -o StrictHostKeyChecking=no target/myweb.war ec2-user@10.0.0.239:/opt/apache-tomcat-9.0.46/webapps
-              ssh ec2-user@10.0.0.239 /opt/apache-tomcat-9.0.46/bin/shutdown.sh
-              ssh ec2-user@10.0.0.239 /opt/apache-tomcat-9.0.46/bin/startup.sh
-              """ 
-            } 
+            steps{
+              sshagent(['tomcat9']) {
+                  sh """
+                  scp -o StrictHostKeyChecking=no target/myweb.war ec2-user@10.0.0.239:/opt/apache-tomcat-9.0.46/webapps
+                  ssh ec2-user@10.0.0.239 /opt/apache-tomcat-9.0.46/bin/shutdown.sh
+                  ssh ec2-user@10.0.0.239 /opt/apache-tomcat-9.0.46/bin/startup.sh
+                  """ 
+                } 
+            }         
         }
     }
 }
